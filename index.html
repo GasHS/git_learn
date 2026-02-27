@@ -1,12 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Hello World!</title>
+  <title>Click Game</title>
 </head>
 <body>
 
-<h1>Edited on GitHub </h1>
-<p>This is the first file in my new Git Repo.</p>
+<h3>Score: <span id="score">0</span></h3>
+<canvas id="game" width="400" height="400" style="border:1px solid black"></canvas>
+
+<script>
+  const canvas = document.getElementById("game");
+  const ctx = canvas.getContext("2d");
+  const scoreText = document.getElementById("score");
+
+  let score = 0;
+  let box = { x: 100, y: 100, size: 40 };
+
+  function randomPosition() {
+    box.x = Math.random() * (canvas.width - box.size);
+    box.y = Math.random() * (canvas.height - box.size);
+  }
+
+  canvas.addEventListener("click", (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    if (
+      mouseX > box.x &&
+      mouseX < box.x + box.size &&
+      mouseY > box.y &&
+      mouseY < box.y + box.size
+    ) {
+      score++;
+      scoreText.textContent = score;
+      randomPosition();
+    }
+  });
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "red";
+    ctx.fillRect(box.x, box.y, box.size, box.size);
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+</script>
 
 </body>
 </html>
+
